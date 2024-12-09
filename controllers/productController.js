@@ -11,7 +11,7 @@ const addProduct = async (req, res) => {
       category,
       subCategory,
       sizes,
-      negosiasi,
+      bestseller,
     } = req.body;
 
     const image1 = req.files.image1 && req.files.image1[0];
@@ -39,7 +39,7 @@ const addProduct = async (req, res) => {
       category,
       subCategory,
       sizes: JSON.parse(sizes),
-      negosiasi: negosiasi === "true" ? true : false,
+      bestseller: bestseller === "true" ? true : false,
       image: imagesUrl,
       date: Date.now(),
     };
@@ -49,7 +49,7 @@ const addProduct = async (req, res) => {
     const product = new productModel(productData);
     await product.save();
 
-    res.json({ success: true, message: "Product added successfully" });
+    res.json({ success: true, message: "Produk Berhasil Ditambahkan" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
@@ -71,7 +71,7 @@ const listProducts = async (req, res) => {
 const removeProduct = async (req, res) => {
   try {
     await productModel.findByIdAndDelete(req.body.id);
-    res.json({ success: true, message: "Product removed successfully" });
+    res.json({ success: true, message: "Produk Berhasil Dihapus" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });

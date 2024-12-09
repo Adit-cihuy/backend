@@ -1,5 +1,6 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
+import negotiationModel from "../models/negotiationModel.js";
 import Stripe from "stripe";
 
 // gateway initalized
@@ -31,7 +32,7 @@ const placeOrder = async (req, res) => {
       cartData: {},
     });
 
-    res.json({ success: true, message: "Order placed successfully" });
+    res.json({ success: true, message: "Orderan Berhasil Dibuat" });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });
@@ -41,7 +42,7 @@ const placeOrder = async (req, res) => {
 // Placing orders using Stripe Method
 const placeOrderStripe = async (req, res) => {
   try {
-    const { userId, items, amount, address } = req.body;
+    const { userId, items, amount, address, negotiationId } = req.body;
     const { origin } = req.headers;
 
     const orderData = {
@@ -49,24 +50,36 @@ const placeOrderStripe = async (req, res) => {
       items,
       amount,
       address,
-      paymentMethod: "COD",
+      paymentMethod: "TRANSFER",
       payment: false,
       date: Date.now(),
+      negotiationId,
     };
+
+    if (negotiationId) {
+      await negotiationModel.findByIdAndDelete(negotiationId);
+    }
 
     const newOrder = new orderModel(orderData);
     await newOrder.save();
 
-    const line_items = items.map((item) => ({
-      price_data: {
-        currency: currency,
-        product_data: {
-          name: item.name,
+    const line_items = items.map((item) => {
+      let itemPrice = item.price;
+      const matchedNegotiation = item.negotiation;
+      if (matchedNegotiation && matchedNegotiation.status === "accepted") {
+        itemPrice = matchedNegotiation.offeredPrice;
+      }
+      return {
+        price_data: {
+          currency: currency,
+          product_data: {
+            name: item.name,
+          },
+          unit_amount: itemPrice * 100,
         },
-        unit_amount: item.price * 100,
-      },
-      quantity: item.quantity,
-    }));
+        quantity: item.quantity,
+      };
+    });
 
     line_items.push({
       price_data: {
@@ -78,6 +91,15 @@ const placeOrderStripe = async (req, res) => {
       },
       quantity: 1,
     });
+
+    const calculatedAmount = line_items.reduce(
+      (sum, item) => sum + item.price_data.unit_amount * item.quantity,
+      0
+    );
+
+    if (calculatedAmount !== amount * 100) {
+      throw new Error("Amount mismatch between FE and BE");
+    }
 
     const session = await stripe.checkout.sessions.create({
       success_url: `${origin}/verify?success=true&orderId=${newOrder._id}`,
@@ -93,13 +115,20 @@ const placeOrderStripe = async (req, res) => {
   }
 };
 
+
 // verify stripe
 const verifyStripe = async (req, res) => {
-  const { orderId, success, userId } = req.body;
+  const { orderId, success, userId, negotiationId } = req.body;
   try {
     if (success === "true") {
       await orderModel.findByIdAndUpdate(orderId, { payment: true });
+
+      if (negotiationId) {
+        await negotiationModel.findByIdAndDelete(negotiationId);
+      }
+
       await userModel.findByIdAndUpdate(userId, { cartData: {} });
+
       res.json({ success: true });
     } else {
       await orderModel.findByIdAndDelete(orderId);
@@ -143,7 +172,7 @@ const updateStatus = async (req, res) => {
       status,
     });
 
-    res.json({ success: true, message: "Order status updated successfully" });
+    res.json({ success: true, message: "Status Orderan Berhasil Diperbaruhi" });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });
