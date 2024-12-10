@@ -32,7 +32,7 @@ const placeOrder = async (req, res) => {
       cartData: {},
     });
 
-    res.json({ success: true, message: "Orderan Berhasil Dibuat" });
+    res.json({ success: true, message: "Pesanan Berhasil Dibuat" });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });
