@@ -49,7 +49,7 @@ const addProduct = async (req, res) => {
     const product = new productModel(productData);
     await product.save();
 
-    res.json({ success: true, message: "Produk Berhasil Ditambahkan" });
+    res.json({ success: true, message: "Produk berhasil di tambahkan" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
@@ -71,7 +71,7 @@ const listProducts = async (req, res) => {
 const removeProduct = async (req, res) => {
   try {
     await productModel.findByIdAndDelete(req.body.id);
-    res.json({ success: true, message: "Produk Berhasil Dihapus" });
+    res.json({ success: true, message: "Produk berhasil di hapus" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });

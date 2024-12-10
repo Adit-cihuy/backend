@@ -8,7 +8,7 @@ export const createNegotiation = async (req, res) => {
 
   try {
     const product = await productModel.findById(productId);
-    if (!product) return res.status(404).json({ message: "Product not found" });
+    if (!product) return res.status(404).json({ message: "Produk tidak di temukan" });
 
     const negotiation = await negotiationModel.create({
       product: productId,
@@ -80,7 +80,7 @@ export const updateNegotiationStatus = async (req, res) => {
     if (!negotiation)
       return res
         .status(404)
-        .json({ success: false, message: "Negotiation not found" });
+        .json({ success: false, message: "Negosisi tidak di temukan" });
 
     res.json({ success: true, data: negotiation });
   } catch (error) {

@@ -28,7 +28,6 @@ app.use("/api/negotiation", negotiationRouter);
 
 app.get("/", (req, res) => {
   res.send("API is running");
-  res.json({ message: "API is running" });
 });
 
 app.listen(port, () => {

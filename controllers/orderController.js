@@ -32,7 +32,7 @@ const placeOrder = async (req, res) => {
       cartData: {},
     });
 
-    res.json({ success: true, message: "Pesanan Berhasil Dibuat" });
+    res.json({ success: true, message: "Order berhasil dibuat" });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });
@@ -172,7 +172,7 @@ const updateStatus = async (req, res) => {
       status,
     });
 
-    res.json({ success: true, message: "Status Orderan Berhasil Diperbaruhi" });
+    res.json({ success: true, message: "Status Order berhasil di update" });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });

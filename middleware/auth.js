@@ -4,7 +4,7 @@ const authUser = async (req, res, next) => {
   const { token } = req.headers;
 
   if (!token) {
-    return res.json({ success: false, message: "Silahkan Login Dulu" });
+    return res.json({ success: false, message: "Anda Tidak Memiliki Akses" });
   }
 
   try {

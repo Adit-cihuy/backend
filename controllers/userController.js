@@ -15,7 +15,7 @@ const loginUser = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.json({ success: false, message: "User doesn't exists" });
+      return res.json({ success: false, message: "Pengguna tidak di temukan" });
     }
 
     const isMatch = await bycrypt.compare(password, user.password);
@@ -24,7 +24,7 @@ const loginUser = async (req, res) => {
       const token = createToken(user._id);
       res.json({ success: true, token });
     } else {
-      res.json({ success: false, message: "Invalid credentials" });
+      res.json({ success: false, message: "Data tidak cocok" });
     }
   } catch (error) {
     console.log(error);
@@ -41,21 +41,21 @@ const registerUser = async (req, res) => {
     const exists = await userModel.findOne({ email });
 
     if (exists) {
-      return res.json({ success: false, message: "User already exists" });
+      return res.json({ success: false, message: "Pengguna sudah ada" });
     }
 
     // validating email format & strong password
     if (!validator.isEmail(email)) {
       return res.json({
         success: false,
-        message: "Please enter a valid email",
+        message: "Periksa format email anda",
       });
     }
 
     if (password.length < 8) {
       return res.json({
         success: false,
-        message: "Please enter a strong password",
+        message: "Masukkan password minimal 8 karakter",
       });
     }
 
@@ -91,7 +91,7 @@ const adminLogin = async (req, res) => {
       const token = jwt.sign(email + password, process.env.JWT_SECRET);
       res.json({ success: true, token });
     } else {
-      res.json({ success: false, message: "Invalid credentials" });
+      res.json({ success: false, message: "Data tidak cocok" });
     }
   } catch (error) {
     console.log(error);

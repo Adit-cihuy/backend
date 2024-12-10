@@ -21,7 +21,7 @@ const addToCart = async (req, res) => {
 
     await userModel.findByIdAndUpdate(userId, { cartData });
 
-    res.json({ success: true, message: "Produk berhasil dimasukkan ke keranjang" });
+    res.json({ success: true, message: "Produk di tambahkan ke keranjang" });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });
@@ -40,7 +40,7 @@ const updateCart = async (req, res) => {
 
     await userModel.findByIdAndUpdate(userId, { cartData });
 
-    res.json({ success: true, message: "Produk berhasil diperbarui dikeranjang" });
+    res.json({ success: true, message: "Produk di tambahkan ke keranjang" });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });
