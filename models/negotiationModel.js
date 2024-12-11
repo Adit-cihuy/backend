@@ -12,3 +12,4 @@ const negotiationModel =
   mongoose.models.Negotiation || mongoose.model("negotiation", negotiationSchema);
 
 export default negotiationModel;
+// cihuyy
