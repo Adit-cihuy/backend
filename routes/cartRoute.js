@@ -12,4 +12,6 @@ cartRouter.post("/get", authUser, getUserCart);
 cartRouter.post("/add", authUser, addToCart);
 cartRouter.post("/update", authUser, updateCart);
 
+// cartRouter.get("/", getUserCart)
+
 export default cartRouter;
