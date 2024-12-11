@@ -3,9 +3,9 @@
   "rewrites": [
       {
         "source": "/(.*)",
-        "destination": "/"
+        "destination": "server.js"
       }
-    ],
+  ],
   "builds": [
       {
           "src": "server.js",
@@ -15,12 +15,6 @@
                   "dist/**"
               ]
           }
-      }
-  ],
-  "routes": [
-      {
-          "src": "/(.*)",
-          "dest": "server.js"
       }
   ]
 }
