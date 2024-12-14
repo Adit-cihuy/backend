@@ -1,20 +1,23 @@
 {
-  "version": 2,
-  "rewrites": [
-      {
-        "source": "/(.*)",
-        "destination": "server.js"
-      }
-  ],
-  "builds": [
-      {
-          "src": "server.js",
-          "use": "@vercel/node",
-          "config": {
-              "includeFiles": [
-                  "dist/**"
-              ]
-          }
-      }
-  ]
+    "version": 2,
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "server.js"
+        }
+    ],
+    "builds": [
+        {
+            "src": "server.js",
+            "use": "@vercel/node",
+            "config": {
+                "includeFiles": [
+                    "dist/**"
+                ]
+            }
+        }
+    ],
+    "env": {
+        "MONGODB_URI": "mongodb+srv://mrslow321:eCPDn1h3CaDDCk16@cluster0.xqpsd.mongodb.net"
+    }
 }
