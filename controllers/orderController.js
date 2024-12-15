@@ -124,8 +124,23 @@ const verifyStripe = async (req, res) => {
       await orderModel.findByIdAndUpdate(orderId, { payment: true });
 
       if (negotiationId) {
-        await negotiationModel.findByIdAndDelete(negotiationId);
+        const negotiation = await negotiationModel.findById(negotiationId);
+
+        if (negotiation && negotiation.status === "accepted") {
+          const product = await productModel.findById(negotiation.product);
+
+          // Update harga produk ke offeredPrice
+          if (product) {
+            await productModel.findByIdAndUpdate(product._id, {
+              price: negotiation.offeredPrice,
+            });
+          }
+
+          // Hapus negosiasi setelah harga diperbarui
+          await negotiationModel.findByIdAndDelete(negotiationId);
+        }
       }
+
 
       await userModel.findByIdAndUpdate(userId, { cartData: {} });
 
